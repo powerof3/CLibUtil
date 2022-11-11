@@ -54,20 +54,20 @@ namespace clib_util
 		}
 
 		// https://stackoverflow.com/a/66897681
-		inline void trim(std::string& s)
+		inline void trim(std::string& a_str)
 		{
 			constexpr auto not_space = [](unsigned char ch) { return !std::isspace(ch); };
 
 			// erase the the spaces at the back first
 			// so we don't have to do extra work
-			s.erase(
-				std::ranges::find_if(s | std::views::reverse, not_space).base(),
-				s.end());
+			a_str.erase(
+				std::ranges::find_if(a_str | std::views::reverse, not_space).base(),
+				a_str.end());
 
 			// erase the spaces at the front
-			s.erase(
-				s.begin(),
-				std::ranges::find_if(s, not_space));
+			a_str.erase(
+				a_str.begin(),
+				std::ranges::find_if(a_str, not_space));
 		}
 
 		inline std::string trim_copy(std::string s)
@@ -163,14 +163,16 @@ namespace clib_util
 
 		inline std::string remove_non_alphanumeric(std::string& a_str)
 		{
-			std::erase_if(a_str, [](unsigned char ch) { return !std::isalnum(ch); });
-			return a_str;
+			std::ranges::replace_if(
+				a_str, [](unsigned char ch) { return !std::isalnum(ch); }, ' ');
+			return trim_copy(a_str);
 		}
 
 		inline std::string remove_non_numeric(std::string& a_str)
 		{
-			std::erase_if(a_str, [](unsigned char ch) { return !std::isdigit(ch); });
-			return a_str;
+			std::ranges::replace_if(
+				a_str, [](unsigned char ch) { return !std::isdigit(ch); }, ' ');
+			return trim_copy(a_str);
 		}
 
 		inline void replace_all(std::string& a_str, std::string_view a_search, std::string_view a_replace)
