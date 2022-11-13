@@ -48,7 +48,7 @@ namespace clib_util
 
 	namespace string
 	{
-		inline std::uint64_t const_hash(std::string_view a_str)
+		inline constexpr std::uint64_t const_hash(std::string_view a_str)
 		{
 			return hash::hash_64(a_str);
 		}
