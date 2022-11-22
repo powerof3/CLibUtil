@@ -48,9 +48,17 @@ namespace clib_util
 
 	namespace string
 	{
-		inline constexpr std::uint64_t const_hash(std::string_view a_str)
+		constexpr std::uint64_t const_hash(std::string_view a_str)
 		{
 			return hash::hash_64(a_str);
+		}
+
+		inline namespace literals
+		{
+			constexpr std::uint64_t operator""_hash(const char* a_str, std::size_t a_len)
+			{
+				return hash::hash_64(std::string_view{ a_str, a_len });
+			}
 		}
 
 		// https://stackoverflow.com/a/66897681
