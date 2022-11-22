@@ -55,7 +55,7 @@ namespace clib_util
 
 		inline namespace literals
 		{
-			constexpr std::uint64_t operator""_hash(const char* a_str, std::size_t a_len)
+			constexpr std::uint64_t operator""_h(const char* a_str, std::size_t a_len)
 			{
 				return hash::hash_64(std::string_view{ a_str, a_len });
 			}
