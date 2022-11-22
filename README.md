@@ -20,3 +20,6 @@ A header only library of utility functions spun off from CommonLibSSE
 + distribution.hpp
   + `get_configs` function to retrieve all files containing custom suffix and extension
   + other utility functions used in `Distributor` style mods (SPID, KID)
+  
+ + simpleINI.hpp
+    + convenient [SimpleINI](https://github.com/brofield/simpleini) value getter and setter
