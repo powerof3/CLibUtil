@@ -78,10 +78,10 @@ namespace clib_util
 				std::ranges::find_if(a_str, not_space));
 		}
 
-		inline std::string trim_copy(std::string s)
+		inline std::string trim_copy(std::string a_str)
 		{
-			trim(s);
-			return s;
+			trim(a_str);
+			return a_str;
 		}
 
 		inline bool is_empty(const char* a_str)
@@ -91,14 +91,18 @@ namespace clib_util
 
 		inline bool is_only_digit(std::string_view a_str)
 		{
-			return std::ranges::all_of(a_str, [](unsigned char c) {
-				return std::isdigit(c);
+			return std::ranges::all_of(a_str, [](unsigned char ch) {
+				return std::isdigit(ch);
 			});
 		}
 
 		inline bool is_only_hex(std::string_view a_str, bool a_requirePrefix = true)
 		{
-			if (!a_requirePrefix || a_str.compare(0, 2, "0x") == 0 || a_str.compare(0, 2, "0X") == 0) {
+			if (!a_requirePrefix) {
+				return std::ranges::all_of(a_str, [](unsigned char ch) {
+					return std::isxdigit(ch);
+				});
+			} else if (a_str.compare(0, 2, "0x") == 0 || a_str.compare(0, 2, "0X") == 0) {
 				return a_str.size() > 2 && std::all_of(a_str.begin() + 2, a_str.end(), [](unsigned char ch) {
 					return std::isxdigit(ch);
 				});

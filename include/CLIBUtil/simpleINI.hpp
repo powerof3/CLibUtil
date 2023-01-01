@@ -1,5 +1,7 @@
 #pragma once
 
+#include <utility>
+
 #include "string.hpp"
 #include "detail/SimpleIni.h"
 
