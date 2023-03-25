@@ -1,7 +1,6 @@
 #pragma once
 
 #include <filesystem>
-#include <ranges>
 #include <variant>
 
 #include "string.hpp"
