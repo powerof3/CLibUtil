@@ -16,6 +16,9 @@ namespace clib_util
 		explicit RNG(const std::uint32_t a_seed) :
 			_rng(a_seed)
 		{}
+		explicit RNG(const std::uint64_t a_seed) :
+			_rng(a_seed)
+		{}
 
 		template <class T, class = std::enable_if_t<std::is_arithmetic_v<T>>>
 		T Generate(T a_min, T a_max)
