@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.22)
 
 project(
 	CLibUtil
-	VERSION 1.2.5
+	VERSION 1.3.0
 	LANGUAGES CXX
 )
 
