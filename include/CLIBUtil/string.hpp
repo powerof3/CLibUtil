@@ -195,48 +195,45 @@ namespace clib_util
 			return { range.begin(), range.end() };
 		}
 
-		namespace convert
+		// https://github.com/clayne/ScaleformTranslationPP/blob/master/src/LocaleManager.cpp
+		inline std::wstring to_wstring(const std::string& a_str)
 		{
-			// https://github.com/clayne/ScaleformTranslationPP/blob/master/src/LocaleManager.cpp
-		    inline std::wstring string_to_wstring(const std::string& a_str)
-			{
-				if (a_str.empty()) {
-					return {};
-				}
-
-				auto size = MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, a_str.c_str(), static_cast<int>(a_str.length()), nullptr, 0);
-				bool err = size == 0;
-				if (!err) {
-					std::wstring strTo;
-					strTo.resize(size);
-					err = MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, a_str.c_str(), static_cast<int>(a_str.length()), strTo.data(), size) == 0;
-					if (!err) {
-						return strTo;
-					}
-				}
-
+			if (a_str.empty()) {
 				return {};
 			}
 
-            inline std::string wstring_to_string(const std::wstring& a_str)
-			{
-				if (a_str.empty()) {
-					return {};
-				}
-
-				auto size = WideCharToMultiByte(CP_UTF8, 0, a_str.c_str(), static_cast<int>(a_str.length()), nullptr, 0, nullptr, nullptr);
-				bool err = size == 0;
+			auto size = MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, a_str.c_str(), static_cast<int>(a_str.length()), nullptr, 0);
+			bool err = size == 0;
+			if (!err) {
+				std::wstring strTo;
+				strTo.resize(size);
+				err = MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, a_str.c_str(), static_cast<int>(a_str.length()), strTo.data(), size) == 0;
 				if (!err) {
-					std::string strTo;
-					strTo.resize(size);
-					err = WideCharToMultiByte(CP_UTF8, 0, a_str.c_str(), static_cast<int>(a_str.length()), strTo.data(), size, nullptr, nullptr) == 0;
-					if (!err) {
-						return strTo;
-					}
+					return strTo;
 				}
-
-                return {};
 			}
+
+			return {};
+		}
+
+		inline std::string to_string(const std::wstring& a_str)
+		{
+			if (a_str.empty()) {
+				return {};
+			}
+
+			auto size = WideCharToMultiByte(CP_UTF8, 0, a_str.c_str(), static_cast<int>(a_str.length()), nullptr, 0, nullptr, nullptr);
+			bool err = size == 0;
+			if (!err) {
+				std::string strTo;
+				strTo.resize(size);
+				err = WideCharToMultiByte(CP_UTF8, 0, a_str.c_str(), static_cast<int>(a_str.length()), strTo.data(), size, nullptr, nullptr) == 0;
+				if (!err) {
+					return strTo;
+				}
+			}
+
+			return {};
 		}
 	}
 }
