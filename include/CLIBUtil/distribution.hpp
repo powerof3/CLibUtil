@@ -45,6 +45,29 @@ namespace clib_util::distribution
 		return configs;
 	}
 
+    inline std::vector<std::filesystem::path> get_configs_paths(const std::filesystem::path& a_folder, std::string_view a_suffix, std::string_view a_extension)
+	{
+		std::vector<std::filesystem::path> configs{};
+		for (const auto iterator = std::filesystem::directory_iterator(a_folder); const auto& entry : iterator) {
+			if (entry.exists()) {
+				if (const auto& path = entry.path(); !path.empty() && path.extension() == a_extension) {
+					if (const auto& fileName = entry.path().string(); fileName.rfind(a_suffix) != std::string::npos) {
+						configs.push_back(path);
+					}
+				}
+			}
+		}
+
+		std::ranges::sort(configs);
+
+		return configs;
+	}
+
+	inline std::vector<std::filesystem::path> get_configs_paths(const std::filesystem::path& a_folder, std::string_view a_extension)
+	{
+		return get_configs_paths(a_folder, "", a_extension);
+	}
+
 	inline bool is_mod_name(std::string_view a_str)
 	{
 		return a_str.contains(".es");
