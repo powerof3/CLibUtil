@@ -153,39 +153,49 @@ namespace clib_util
 			return trim_copy(a_str);
 		}
 
-		inline void replace_all(std::string& a_str, std::string_view a_search, std::string_view a_replace)
+		inline bool replace_all(std::string& a_str, std::string_view a_search, std::string_view a_replace)
 		{
 			if (a_search.empty()) {
-				return;
+				return false;
 			}
 
 			std::size_t pos = 0;
+			bool wasReplaced = false;
 			while ((pos = a_str.find(a_search, pos)) != std::string::npos) {
 				a_str.replace(pos, a_search.length(), a_replace);
 				pos += a_replace.length();
+				wasReplaced = true;
 			}
+
+			return wasReplaced;
 		}
 
-		inline void replace_first_instance(std::string& a_str, std::string_view a_search, std::string_view a_replace)
+		inline bool replace_first_instance(std::string& a_str, std::string_view a_search, std::string_view a_replace)
 		{
 			if (a_search.empty()) {
-				return;
+				return false;
 			}
 
 			if (const std::size_t pos = a_str.find(a_search); pos != std::string::npos) {
 				a_str.replace(pos, a_search.length(), a_replace);
+				return true;
 			}
+
+			return false;
 		}
 
-		inline void replace_last_instance(std::string& a_str, std::string_view a_search, std::string_view a_replace)
+		inline bool replace_last_instance(std::string& a_str, std::string_view a_search, std::string_view a_replace)
 		{
 			if (a_search.empty()) {
-				return;
+				return false;
 			}
 
 			if (const std::size_t pos = a_str.rfind(a_search); pos != std::string::npos) {
 				a_str.replace(pos, a_search.length(), a_replace);
+				return true;
 			}
+
+			return false;
 		}
 
 		inline std::vector<std::string> split(const std::string& a_str, std::string_view a_delimiter)
