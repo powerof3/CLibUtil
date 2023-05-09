@@ -3,6 +3,7 @@ set(headers ${headers}
 	include/CLIBUtil/detail/XoshiroCpp.hpp
 	include/CLIBUtil/distribution.hpp
 	include/CLIBUtil/hash.hpp
+	include/CLIBUtil/Bitmask.hpp
 	include/CLIBUtil/numeric.hpp
 	include/CLIBUtil/rng.hpp
 	include/CLIBUtil/simpleINI.hpp
