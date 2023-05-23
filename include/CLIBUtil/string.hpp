@@ -139,6 +139,28 @@ namespace clib_util
 			}
 		}
 
+		inline std::string tolower(std::string_view a_str)
+		{
+			std::string result;
+			std::ranges::transform(a_str, result.begin(), [](unsigned char c) { return std::tolower(c); });
+			return result;
+		}
+
+		inline std::string toupper(std::string_view a_str)
+		{
+			std::string result;
+			std::ranges::transform(a_str, result.begin(), [](unsigned char c) { return std::tolower(c); });
+			return result;
+		}
+
+		inline std::string capitalize(std::string_view a_str, unsigned char word_delim = ' ')
+		{
+			std::string result(a_str);
+            for (int i = 0; i < result.size(); ++i)
+				result[i] = (i == 0 || result[i - 1] == word_delim) ? std::toupper(result[i]) : std::tolower(result[i]);
+			return result;
+		}
+
 		inline std::string remove_non_alphanumeric(std::string& a_str)
 		{
 			std::ranges::replace_if(
