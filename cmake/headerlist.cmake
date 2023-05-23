@@ -1,4 +1,5 @@
 set(headers ${headers}
+	include/CLIBUtil/constexpr_map.hpp
 	include/CLIBUtil/detail/SimpleIni.h
 	include/CLIBUtil/detail/XoshiroCpp.hpp
 	include/CLIBUtil/distribution.hpp
