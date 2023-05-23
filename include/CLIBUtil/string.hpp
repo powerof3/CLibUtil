@@ -156,7 +156,7 @@ namespace clib_util
 		inline std::string capitalize(std::string_view a_str, unsigned char word_delim = ' ')
 		{
 			std::string result(a_str);
-            for (int i = 0; i < result.size(); ++i)
+			for (int i = 0; i < result.size(); ++i)
 				result[i] = (i == 0 || result[i - 1] == word_delim) ? std::toupper(result[i]) : std::tolower(result[i]);
 			return result;
 		}

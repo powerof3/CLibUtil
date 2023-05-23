@@ -1,7 +1,7 @@
 #pragma once
 
 /// A template to enable bitmask behavior (e.g. bitwise operators) for a given type E.
-///	Typically used for typed enums.
+/// Typically used for typed enums.
 template <typename E>
 struct enable_bitmask_operators
 {

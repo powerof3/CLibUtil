@@ -218,7 +218,7 @@ namespace clib_util
 				return pattern;
 			}
 
-			bool SetPattern(std::string pattern)
+			bool SetPattern(std::string_view pattern)
 			{
 				auto str = string::capitalize(pattern, '+');
 
@@ -238,7 +238,7 @@ namespace clib_util
 						auto name = details::GetNameByKey(key);
 						return std::string(name == "NumPLUS"sv ? "Num+"sv : name);
 					});
-				} catch (std::range_error& error) {
+				} catch (std::range_error&) {
 					isValid = false;
 					return false;
 				}
