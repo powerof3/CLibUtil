@@ -1,5 +1,7 @@
 #pragma once
 
+#include <type_traits>
+
 /// A template to enable bitmask behavior (e.g. bitwise operators) for a given type E.
 /// Typically used for typed enums.
 template <typename E>
