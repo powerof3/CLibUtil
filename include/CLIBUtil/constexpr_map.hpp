@@ -8,11 +8,7 @@ namespace clib_util
 	template <typename Key, typename Value, std::size_t Size>
 	struct constexpr_map
 	{
-		constexpr_map(std::array<std::pair<Key, Value>, Size> const& a_data) :
-			data(a_data)
-		{}
-
-		[[nodiscard]] constexpr Value at(const Key& key) const
+	    [[nodiscard]] constexpr Value at(const Key& key) const
 		{
 			const auto itr =
 				std::find_if(begin(data), end(data),
@@ -36,7 +32,7 @@ namespace clib_util
 			}
 		}
 
-	private:
+		// member
 		std::array<std::pair<Key, Value>, Size> data;
 	};
 }
