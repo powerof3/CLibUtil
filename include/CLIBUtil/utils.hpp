@@ -2,6 +2,7 @@
 
 #include "distribution.hpp"
 #include "hash.hpp"
+#include "hotkeys.hpp"
 #include "numeric.hpp"
 #include "rng.hpp"
 #include "simpleINI.hpp"

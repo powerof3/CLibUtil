@@ -1,5 +1,11 @@
 #pragma once
+
 #include "constexpr_map.hpp"
+#include "string.hpp"
+
+#include <functional>
+#include <set>
+#include <utility>
 
 namespace clib_util
 {
@@ -7,7 +13,7 @@ namespace clib_util
 	{
 		namespace details
 		{
-			static constexpr std::array<std::pair<std::string_view, uint32_t>, 121> allKeys{
+			static constexpr std::array<std::pair<std::string_view, std::uint32_t>, 147> allKeys{
 				{ { "esc"sv, 1 },
 					{ "1"sv, 2 },
 					{ "2"sv, 3 },
@@ -129,43 +135,70 @@ namespace clib_util
 					{ "insert"sv, 210 },
 					{ "ins"sv, 210 },
 					{ "del"sv, 211 },
-					{ "delete"sv, 211 } }
+					{ "delete"sv, 211 },
+					{ "leftmousebutton"sv, 256 }, // taken from SKSE InputMap
+					{ "rightmousebutton"sv, 257 },
+					{ "middlemousebutton"sv, 258 },
+					{ "mousebutton3"sv, 259 },
+					{ "mousebutton4"sv, 260 },
+					{ "mousebutton5"sv, 261 },
+					{ "mousebutton6"sv, 262 },
+					{ "mousebutton7"sv, 263 },
+					{ "mousewheelup"sv, 264 },
+					{ "mousewheeldown"sv, 265 },
+					{ "gamepaddpadup"sv, 266 },
+					{ "gamepaddpaddown"sv, 267 },
+					{ "gamepaddpadleft"sv, 268 },
+					{ "gamepaddpadright"sv, 269 },
+					{ "gamepadstart"sv, 270 },
+					{ "gamepadback"sv, 271 },
+					{ "gamepadleftthumb"sv, 272 },
+					{ "gamepadrightthumb"sv, 273 },
+					{ "gamepadleftshoulder"sv, 274 },
+					{ "gamepadrightshoulder"sv, 275 },
+					{ "gamepada"sv, 276 },
+					{ "gamepadb"sv, 277 },
+					{ "gamepadx"sv, 278 },
+					{ "gamepady"sv, 279 },
+					{ "gamepadlt"sv, 280 },
+					{ "gamepadrt"sv, 281 } }
 			};
 
-			inline uint32_t GetKeyByName(std::string_view name)
+			inline std::uint32_t GetKeyByName(std::string_view name)
 			{
-				static constexpr auto keyMap = constexpr_map<std::string_view, uint32_t, allKeys.size()>{ { allKeys } };
+				static constexpr auto keyMap = constexpr_map<std::string_view, std::uint32_t, allKeys.size()>{ { allKeys } };
 				return keyMap.at(name);
 			}
 
-			inline std::string_view GetNameByKey(uint32_t key)
+			inline std::string_view GetNameByKey(std::uint32_t key)
 			{
-				static constexpr auto keyMap = constexpr_map<std::string_view, uint32_t, allKeys.size()>{ { allKeys } };
+				static constexpr auto keyMap = constexpr_map<std::string_view, std::uint32_t, allKeys.size()>{ { allKeys } };
 				return keyMap.key(key);
 			}
 		}
 
 		struct KeyCombination
 		{
-			using Key = uint32_t;
+			using Key = std::uint32_t;
 			using Trigger = std::function<void(const KeyCombination*)>;
 
 			KeyCombination(Trigger trigger) :
-				trigger(trigger){};
+				trigger(std::move(trigger))
+		    {}
 
-			KeyCombination(std::string pattern, Trigger trigger) :
-				KeyCombination(trigger)
+			KeyCombination(const std::string& pattern, Trigger trigger) :
+				KeyCombination(std::move(trigger))
 			{
 				SetPattern(pattern);
 			}
 
-			KeyCombination(std::set<Key> keys, Trigger trigger) :
-				KeyCombination(trigger)
+			KeyCombination(const std::set<Key>& keys, Trigger trigger) :
+				KeyCombination(std::move(trigger))
 			{
 				std::vector<std::string> rawKeys;
 
 				try {
-					std::transform(keys.begin(), keys.end(), std::inserter(rawKeys, rawKeys.begin()), [](const auto& key) {
+					std::ranges::transform(keys, std::inserter(rawKeys, rawKeys.begin()), [](const auto& key) {
 						auto name = details::GetNameByKey(key);
 						return std::string(name == "numplus"sv ? "num+"sv : name);
 					});
@@ -179,15 +212,13 @@ namespace clib_util
 
 			bool Process(RE::InputEvent* const* a_event)
 			{
-				if (!isValid)
+				if (!isValid) {
 					return false;
+				}
 
 				std::set<Key> pressed;
 				for (auto event = *a_event; event; event = event->next) {
-					if (event->eventType != RE::INPUT_EVENT_TYPE::kButton)
-						continue;
-
-					const auto button = static_cast<RE::ButtonEvent*>(event);
+					auto button = event->AsButtonEvent();
 					if (!button) {
 						continue;
 					}
@@ -213,14 +244,14 @@ namespace clib_util
 				return alreadyTriggered;
 			}
 
-			std::string_view GetPattern() const
+			[[nodiscard]] std::string_view GetPattern() const
 			{
 				return pattern;
 			}
 
-			bool SetPattern(std::string_view pattern)
+			bool SetPattern(std::string_view a_pattern)
 			{
-				auto str = string::tolower(pattern);
+				auto str = string::tolower(a_pattern);
 
 				string::replace_all(str, " "sv, ""sv);
 				string::replace_all(str, "num+"sv, "numplus"sv);
@@ -234,7 +265,7 @@ namespace clib_util
 					});
 
 					rawKeys.clear();
-					std::transform(keys.begin(), keys.end(), std::inserter(rawKeys, rawKeys.begin()), [](const auto& key) {
+					std::ranges::transform(keys, std::inserter(rawKeys, rawKeys.begin()), [](const auto& key) {
 						auto name = details::GetNameByKey(key);
 						return std::string(name == "numplus"sv ? "num+"sv : name);
 					});
@@ -249,12 +280,12 @@ namespace clib_util
 				return true;
 			}
 
-			bool IsValid() const
+			[[nodiscard]] bool IsValid() const
 			{
 				return isValid;
 			}
 
-			bool IsTriggered()
+			[[nodiscard]] bool IsTriggered() const
 			{
 				return alreadyTriggered;
 			}

@@ -1,5 +1,8 @@
 #pragma once
 
+#include <array>
+#include <stdexcept>
+
 namespace clib_util
 {
 	template <typename Key, typename Value, std::size_t Size>
