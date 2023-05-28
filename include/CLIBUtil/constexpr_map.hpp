@@ -8,7 +8,9 @@ namespace clib_util
 	template <typename Key, typename Value, std::size_t Size>
 	struct constexpr_map
 	{
-		std::array<std::pair<Key, Value>, Size> data;
+		constexpr_map(std::array<std::pair<Key, Value>, Size> const& a_data) :
+			data(a_data)
+		{}
 
 		[[nodiscard]] constexpr Value at(const Key& key) const
 		{
@@ -33,5 +35,8 @@ namespace clib_util
 				throw std::range_error("Not Found");
 			}
 		}
+
+	private:
+		std::array<std::pair<Key, Value>, Size> data;
 	};
 }
