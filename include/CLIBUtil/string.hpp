@@ -142,14 +142,14 @@ namespace clib_util
 		inline std::string tolower(std::string_view a_str)
 		{
 			std::string result(a_str);
-			std::ranges::transform(result, result.begin(), [](unsigned char c) { return std::tolower(c); });
+			std::ranges::transform(result, result.begin(), [](unsigned char c) { return static_cast<unsigned char>(std::tolower(c)); });
 			return result;
 		}
 
 		inline std::string toupper(std::string_view a_str)
 		{
 			std::string result(a_str);
-			std::ranges::transform(result, result.begin(), [](unsigned char c) { return std::toupper(c); });
+			std::ranges::transform(result, result.begin(), [](unsigned char c) { return static_cast<unsigned char>(std::toupper(c)); });
 			return result;
 		}
 
