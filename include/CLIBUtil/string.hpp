@@ -142,22 +142,23 @@ namespace clib_util
 		inline std::string tolower(std::string_view a_str)
 		{
 			std::string result(a_str);
-			std::ranges::transform(result, result.begin(), [](unsigned char c) { return static_cast<unsigned char>(std::tolower(c)); });
+			std::ranges::transform(result, result.begin(), [](unsigned char ch) { return static_cast<unsigned char>(std::tolower(ch)); });
 			return result;
 		}
 
 		inline std::string toupper(std::string_view a_str)
 		{
 			std::string result(a_str);
-			std::ranges::transform(result, result.begin(), [](unsigned char c) { return static_cast<unsigned char>(std::toupper(c)); });
+			std::ranges::transform(result, result.begin(), [](unsigned char ch) { return static_cast<unsigned char>(std::toupper(ch)); });
 			return result;
 		}
 
 		inline std::string capitalize(std::string_view a_str, unsigned char word_delim = ' ')
 		{
 			std::string result(a_str);
-			for (int i = 0; i < result.size(); ++i)
+			for (std::size_t i = 0; i < result.size(); ++i) {
 				result[i] = (i == 0 || result[i - 1] == word_delim) ? std::toupper(result[i]) : std::tolower(result[i]);
+			}
 			return result;
 		}
 

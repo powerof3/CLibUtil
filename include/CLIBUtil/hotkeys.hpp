@@ -13,7 +13,7 @@ namespace clib_util::hotkeys
 
 	namespace details
 	{
-		inline constexpr constexpr_map<std::string_view, std::uint32_t, 154> keyMap{
+		inline constexpr constexpr_map<std::string_view, std::uint32_t, 156> keyMap{
 			{ { { "esc"sv, 1 },
 				{ "1"sv, 2 },
 				{ "2"sv, 3 },
@@ -164,6 +164,8 @@ namespace clib_util::hotkeys
 				{ "rthumb"sv, 273 },
 				{ "lshoulder"sv, 274 },
 				{ "rshoulder"sv, 275 },
+				{ "lbumper"sv, 274 },
+				{ "rbumper"sv, 275 },
 				{ "gamepada"sv, 276 },
 				{ "gamepadb"sv, 277 },
 				{ "gamepadx"sv, 278 },
@@ -305,12 +307,17 @@ namespace clib_util::hotkeys
 			return alreadyTriggered;
 		}
 
+		[[nodiscard]] const std::set<Key>& GetKeys() const
+		{
+			return keys;
+		}
+
 	private:
+		// members
 		Trigger trigger;
 		std::string pattern;
 		std::set<Key> keys;
 		bool alreadyTriggered = false;
 		bool isValid = false;
 	};
-
 }
