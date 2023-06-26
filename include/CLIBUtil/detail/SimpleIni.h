@@ -2214,7 +2214,7 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::SetLongValue(
 #if __STDC_WANT_SECURE_LIB__ && !_WIN32_WCE
     sprintf_s(szInput, a_bUseHex ? "0x%lx" : "%ld", a_nValue);
 #else // !__STDC_WANT_SECURE_LIB__
-    sprintf(szInput, a_bUseHex ? "0x%lx" : "%ld", a_nValue);
+    snprintf(szInput, sizeof(szInput), a_bUseHex ? "0x%lx" : "%ld", a_nValue);
 #endif // __STDC_WANT_SECURE_LIB__
 
     // convert to output text
@@ -2276,7 +2276,7 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::SetDoubleValue(
 #if __STDC_WANT_SECURE_LIB__ && !_WIN32_WCE
     sprintf_s(szInput, "%f", a_nValue);
 #else // !__STDC_WANT_SECURE_LIB__
-    sprintf(szInput, "%f", a_nValue);
+    snprintf(szInput, sizeof(szInput), "%f", a_nValue);
 #endif // __STDC_WANT_SECURE_LIB__
 
     // convert to output text
@@ -2647,7 +2647,7 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::Save(
                         ++comment;
                     }
                     if (shouldWriteNewLine) {
-                        a_oOutput.Write(SI_NEWLINE_A);
+                    a_oOutput.Write(SI_NEWLINE_A);
                     }
                     if (!OutputMultiLineText(a_oOutput, convert, iValue->pComment)) {
                         return SI_FAIL;
@@ -2666,7 +2666,7 @@ CSimpleIniTempl<SI_CHAR,SI_STRLESS,SI_CONVERTER>::Save(
                         return SI_FAIL;
                     }
                     if (!m_bAllowKeyOnly) {
-                        a_oOutput.Write(m_bSpaces ? " = " : "=");
+                    a_oOutput.Write(m_bSpaces ? " = " : "=");
                     }
                     if (m_bParseQuotes && IsSingleLineQuotedValue(iValue->pItem)) {
                         // the only way to preserve external whitespace on a value (i.e. before or after)
