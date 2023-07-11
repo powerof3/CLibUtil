@@ -1,6 +1,7 @@
 #pragma once
 
 #include "distribution.hpp"
+#include "editorID.hpp"
 #include "hash.hpp"
 #include "hotkeys.hpp"
 #include "numeric.hpp"
