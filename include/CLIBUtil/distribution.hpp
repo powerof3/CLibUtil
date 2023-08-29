@@ -75,7 +75,7 @@ namespace clib_util::distribution
 
 	inline bool is_valid_entry(const std::string& a_str)
 	{
-		return !a_str.empty() && !string::icontains(a_str, "NONE"sv);
+		return !a_str.empty() && !string::iequals(a_str, "NONE"sv);
 	}
 
 	inline std::vector<std::string> split_entry(const std::string& a_str, std::string_view a_delimiter = ",")
