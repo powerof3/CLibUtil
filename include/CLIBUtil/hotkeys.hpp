@@ -293,7 +293,9 @@ namespace clib_util::hotkeys
 
 			this->keys = keys;
 			this->pattern = string::join(rawKeys, " + ");
-			isValid = true;
+			// Only non-empty KeyCombinations should be considered valid.
+			// However, we want to allow setting empty patterns to unbind given KeyCombination easily.
+			isValid = !keys.empty(); 
 			return true;
 		}
 
