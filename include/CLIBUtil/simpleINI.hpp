@@ -31,4 +31,21 @@ namespace clib_util::ini
 		}
 		return a_value;
 	}
+
+	template <class T>
+	T& get_value(CSimpleIniA& a_ini, T& a_value, const char* a_section, const char* a_key)
+	{
+		if constexpr (std::is_same_v<T, bool>) {
+			a_value = a_ini.GetBoolValue(a_section, a_key, a_value);
+		} else if constexpr (std::is_floating_point_v<T>) {
+			a_value = static_cast<float>(a_ini.GetDoubleValue(a_section, a_key, a_value));
+		} else if constexpr (std::is_enum_v<T>) {
+			a_value = string::to_num<T>(a_ini.GetValue(a_section, a_key, std::to_string(std::to_underlying(a_value)).c_str()));
+		} else if constexpr (std::is_arithmetic_v<T>) {
+			a_value = string::to_num<T>(a_ini.GetValue(a_section, a_key, std::to_string(a_value).c_str()));
+		} else {
+			a_value = a_ini.GetValue(a_section, a_key, a_value.c_str());
+		}
+		return a_value;
+	}
 }
