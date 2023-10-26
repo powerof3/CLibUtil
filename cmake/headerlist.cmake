@@ -4,6 +4,7 @@ set(headers ${headers}
 	include/CLIBUtil/detail/SimpleIni.h
 	include/CLIBUtil/detail/XoshiroCpp.hpp
 	include/CLIBUtil/distribution.hpp
+	include/CLIBUtil/editorID.hpp
 	include/CLIBUtil/hash.hpp
 	include/CLIBUtil/hotkeys.hpp
 	include/CLIBUtil/numeric.hpp
@@ -11,5 +12,6 @@ set(headers ${headers}
 	include/CLIBUtil/simpleINI.hpp
 	include/CLIBUtil/singleton.hpp
 	include/CLIBUtil/string.hpp
+	include/CLIBUtil/timer.hpp
 	include/CLIBUtil/utils.hpp
 )
