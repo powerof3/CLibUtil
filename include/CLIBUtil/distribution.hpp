@@ -26,14 +26,14 @@ namespace clib_util::distribution
 	using formid_pair = std::pair<std::optional<RE::FormID>, std::optional<std::string>>;
 	using record = std::variant<formid_pair, std::string>;
 
-	inline std::vector<std::string> get_configs(std::string_view a_folder, std::string_view a_suffix, std::string_view a_extension = ".ini"sv)
+	inline std::vector<std::string> get_configs(std::string_view a_folder, std::string_view a_suffix = ""sv, std::string_view a_extension = ".ini"sv)
 	{
 		std::vector<std::string> configs{};
 
 		for (const auto iterator = std::filesystem::directory_iterator(a_folder); const auto& entry : iterator) {
 			if (entry.exists()) {
 				if (const auto& path = entry.path(); !path.empty() && path.extension() == a_extension) {
-					if (const auto& fileName = entry.path().string(); fileName.rfind(a_suffix) != std::string::npos) {
+					if (const auto& fileName = entry.path().string(); a_suffix.empty() || fileName.rfind(a_suffix) != std::string::npos) {
 						configs.push_back(fileName);
 					}
 				}
@@ -45,13 +45,13 @@ namespace clib_util::distribution
 		return configs;
 	}
 
-    inline std::vector<std::filesystem::path> get_configs_paths(const std::filesystem::path& a_folder, std::string_view a_suffix, std::string_view a_extension)
+    inline std::vector<std::filesystem::path> get_configs_paths(const std::filesystem::path& a_folder, std::string_view a_suffix = ""sv, std::string_view a_extension = ".ini"sv)
 	{
 		std::vector<std::filesystem::path> configs{};
 		for (const auto iterator = std::filesystem::directory_iterator(a_folder); const auto& entry : iterator) {
 			if (entry.exists()) {
 				if (const auto& path = entry.path(); !path.empty() && path.extension() == a_extension) {
-					if (const auto& fileName = entry.path().string(); fileName.rfind(a_suffix) != std::string::npos) {
+					if (const auto& fileName = entry.path().string(); a_suffix.empty() || fileName.rfind(a_suffix) != std::string::npos) {
 						configs.push_back(path);
 					}
 				}
@@ -65,7 +65,7 @@ namespace clib_util::distribution
 
 	inline std::vector<std::filesystem::path> get_configs_paths(const std::filesystem::path& a_folder, std::string_view a_extension)
 	{
-		return get_configs_paths(a_folder, "", a_extension);
+		return get_configs_paths(a_folder, ""sv, a_extension);
 	}
 
 	inline bool is_mod_name(std::string_view a_str)
