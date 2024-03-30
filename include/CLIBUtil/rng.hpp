@@ -42,7 +42,7 @@ namespace clib_util
 
 		double generate()
 		{
-			return XoshiroCpp::DoubleFromBits(_rng);
+			return XoshiroCpp::DoubleFromBits(_rng());
 		}
 
 	private:

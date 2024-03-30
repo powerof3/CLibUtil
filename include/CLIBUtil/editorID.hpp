@@ -1,6 +1,5 @@
 #pragma once
 
-#include <libloaderapi.h>
 #include <string>
 
 namespace clib_util::editorID
