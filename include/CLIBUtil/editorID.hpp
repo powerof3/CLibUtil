@@ -35,7 +35,6 @@ namespace clib_util::editorID
 		case RE::FormType::StoryManagerBranchNode:
 		case RE::FormType::StoryManagerQuestNode:
 		case RE::FormType::StoryManagerEventNode:
-		case RE::FormType::SoundRecord:
 			return a_form->GetFormEditorID();
 		default:
 			{
