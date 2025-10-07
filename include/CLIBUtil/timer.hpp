@@ -13,7 +13,7 @@ namespace clib_util
 			startTime = std::chrono::steady_clock::now();
 		}
 
-		void end()
+		void stop()
 		{
 			endTime = std::chrono::steady_clock::now();
 		}
@@ -38,8 +38,10 @@ namespace clib_util
 				return std::format("{} ms", std::chrono::duration_cast<std::chrono::milliseconds>(dur).count());
 			} else if (dur < std::chrono::minutes(1)) {
 				return std::format("{} s", std::chrono::duration_cast<std::chrono::seconds>(dur).count());
+			} else if (dur < std::chrono::hours(1)) {
+				return std::format("{} min", std::chrono::duration_cast<std::chrono::minutes>(dur).count());
 			} else [[unlikely]] {
-				return "> 1 min";
+				return "> 1 hour";
 			}
 		}
 
