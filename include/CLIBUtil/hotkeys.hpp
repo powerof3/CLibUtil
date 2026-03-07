@@ -225,7 +225,6 @@ namespace clib_util::hotkeys
 			}
 
 			std::set<Key> pressed;
-			bool donotinsert = false;
 			for (auto event = *a_event; event; event = event->next) {
 				auto button = event->AsButtonEvent();
 				if (!button || !button->HasIDCode()) {
@@ -249,11 +248,11 @@ namespace clib_util::hotkeys
 				{
 					if (key == 17 || key == 30 || key == 31 || key == 32)
 					{
-						donotinsert = true;
+						continue;
 					}
 				}
 
-				if (button->IsPressed() && !donotinsert) {
+				if (button->IsPressed()) {
 					pressed.insert(key);
 				}
 			}
