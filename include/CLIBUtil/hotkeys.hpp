@@ -254,7 +254,6 @@ namespace clib_util::hotkeys
 				}
 
 				if (button->IsPressed() && !donotinsert) {
-					SKSE::log::info("insert: {}", key);
 					pressed.insert(key);
 				}
 			}
@@ -306,7 +305,7 @@ namespace clib_util::hotkeys
 			this->pattern = string::join(rawKeys, " + ");
 			// Only non-empty KeyCombinations should be considered valid.
 			// However, we want to allow setting empty patterns to unbind given KeyCombination easily.
-			isValid = !keys.empty(); 
+			isValid = !keys.empty();
 			return true;
 		}
 
