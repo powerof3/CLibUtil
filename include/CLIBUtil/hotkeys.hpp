@@ -218,13 +218,14 @@ namespace clib_util::hotkeys
 			this->pattern = string::join(rawKeys, " + ");
 		}
 
-		bool Process(RE::InputEvent* const* a_event)
+		bool Process(RE::InputEvent* const* a_event, const bool a_ignoreMoveKeysOnKeyboard = false)
 		{
 			if (!isValid) {
 				return false;
 			}
 
 			std::set<Key> pressed;
+			bool donotinsert = false;
 			for (auto event = *a_event; event; event = event->next) {
 				auto button = event->AsButtonEvent();
 				if (!button || !button->HasIDCode()) {
@@ -244,10 +245,20 @@ namespace clib_util::hotkeys
 					break;
 				}
 
-				if (button->IsPressed()) {
+				if (a_ignoreMoveKeysOnKeyboard)
+				{
+					if (key == 17 || key == 30 || key == 31 || key == 32)
+					{
+						donotinsert = true;
+					}
+				}
+
+				if (button->IsPressed() && !donotinsert) {
+					SKSE::log::info("insert: {}", key);
 					pressed.insert(key);
 				}
 			}
+
 
 			if (pressed == keys) {
 				if (!alreadyTriggered) {
