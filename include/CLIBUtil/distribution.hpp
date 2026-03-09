@@ -29,18 +29,19 @@ namespace clib_util::distribution
 	inline std::vector<std::string> get_configs(std::string_view a_folder, std::string_view a_suffix = ""sv, std::string_view a_extension = ".ini"sv)
 	{
 		std::vector<std::string> configs{};
-
-		for (const auto iterator = std::filesystem::directory_iterator(a_folder); const auto& entry : iterator) {
-			if (entry.exists()) {
-				if (const auto& path = entry.path(); !path.empty() && path.extension() == a_extension) {
-					if (const auto& fileName = entry.path().string(); a_suffix.empty() || fileName.rfind(a_suffix) != std::string::npos) {
-						configs.push_back(fileName);
+		if (std::filesystem::exists(a_folder) && std::filesystem::is_directory(a_folder)) {
+			for (const auto iterator = std::filesystem::directory_iterator(a_folder); const auto& entry : iterator) {
+				if (entry.exists()) {
+					if (const auto& path = entry.path(); !path.empty() && path.extension() == a_extension) {
+						if (const auto& fileName = entry.path().string(); a_suffix.empty() || fileName.rfind(a_suffix) != std::string::npos) {
+							configs.push_back(fileName);
+						}
 					}
 				}
 			}
-		}
 
-		std::ranges::sort(configs);
+			std::ranges::sort(configs);
+		}
 
 		return configs;
 	}
@@ -48,17 +49,20 @@ namespace clib_util::distribution
     inline std::vector<std::filesystem::path> get_configs_paths(const std::filesystem::path& a_folder, std::string_view a_suffix = ""sv, std::string_view a_extension = ".ini"sv)
 	{
 		std::vector<std::filesystem::path> configs{};
-		for (const auto iterator = std::filesystem::directory_iterator(a_folder); const auto& entry : iterator) {
-			if (entry.exists()) {
-				if (const auto& path = entry.path(); !path.empty() && path.extension() == a_extension) {
-					if (const auto& fileName = entry.path().string(); a_suffix.empty() || fileName.rfind(a_suffix) != std::string::npos) {
-						configs.push_back(path);
+
+		if (std::filesystem::exists(a_folder) && std::filesystem::is_directory(a_folder)) {
+			for (const auto iterator = std::filesystem::directory_iterator(a_folder); const auto& entry : iterator) {
+				if (entry.exists()) {
+					if (const auto& path = entry.path(); !path.empty() && path.extension() == a_extension) {
+						if (const auto& fileName = entry.path().string(); a_suffix.empty() || fileName.rfind(a_suffix) != std::string::npos) {
+							configs.push_back(path);
+						}
 					}
 				}
 			}
-		}
 
-		std::ranges::sort(configs);
+			std::ranges::sort(configs);
+		}
 
 		return configs;
 	}

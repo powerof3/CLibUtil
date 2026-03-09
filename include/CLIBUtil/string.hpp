@@ -226,5 +226,115 @@ namespace clib_util
 			auto range = a_str | std::ranges::views::split(a_delimiter) | std::ranges::views::transform([](auto&& r) { return std::string_view(r); });
 			return { range.begin(), range.end() };
 		}
+
+		/// Parses color values provided in RGBA format.
+		/// Alpha component can be ommited. Defaults to 255.
+		/// 
+		/// Supports the following formats:
+		/// - Integer values: [0-255],[0-255],[0-255],[0-255]
+		/// - Float values: [0.0-1.0],[0.0-1.0],[0.0-1.0],[0.0-1.0]
+		/// - Hex values: 0xRRGGBB or 0xAARRGGBB (Note Hex values use ARGB format)
+		/// - Hex values with # prefix: #RRGGBB or #AARRGGBB (Note Hex values use ARGB format)
+		inline std::optional<RE::GColor> to_color(const std::string& str)
+		{
+			std::string trimmedStr = trim_copy(str);
+
+			if (trimmedStr.empty()) {
+				return std::nullopt;
+			}
+
+			trimmedStr = tolower(trimmedStr);
+
+			if (trimmedStr[0] == '#') {
+				trimmedStr = "0x" + trimmedStr.substr(1);  // Convert #RRGGBB to 0xRRGGBB for uniform processing
+			}
+
+			// Handle hex format: 0xRRGGBB or 0xAARRGGBB
+			if (is_only_hex(trimmedStr)) {
+				std::string hexDigits = trimmedStr.substr(2);  // Skip "0x"
+				auto length = hexDigits.length();
+
+				if (length != 6 && length != 8) {
+					return std::nullopt;
+				}
+
+				std::uint32_t hexValue = to_num<std::uint32_t>(trimmedStr, true);
+
+				if (length == 6) {
+					hexValue += 0xFF000000;  // Add full alpha if not provided
+				}
+
+				return RE::GColor(hexValue);
+			}
+
+			// Handle comma-separated format: integer or float values
+			auto components = split(trimmedStr, ",");
+			if (components.size() < 3) {
+				return std::nullopt;
+			}
+
+			trim(components[0]);
+			trim(components[1]);
+			trim(components[2]);
+
+			if (components.size() == 4) {
+				trim(components[3]);
+			}
+
+			// Check if values are floats (contain decimal point)
+			bool isFloat = components[0].find('.') != std::string::npos ||
+			               components[1].find('.') != std::string::npos ||
+			               components[2].find('.') != std::string::npos ||
+			               (components.size() == 4 && components[3].find('.') != std::string::npos);
+
+			if (isFloat) {
+				try {
+					float red = to_num<float>(components[0]);
+					float green = to_num<float>(components[1]);
+					float blue = to_num<float>(components[2]);
+					float alpha = (components.size() == 4) ? to_num<float>(components[3]) : 1.0f;
+
+					// Clamp values to [0.0, 1.0] range
+					red = std::min(1.0f, std::max(0.0f, red)) * 255.0f;
+					green = std::min(1.0f, std::max(0.0f, green)) * 255.0f;
+					blue = std::min(1.0f, std::max(0.0f, blue)) * 255.0f;
+					alpha = std::min(1.0f, std::max(0.0f, alpha)) * 255.0f;
+
+					return RE::GColor{
+						static_cast<std::uint8_t>(red),
+						static_cast<std::uint8_t>(green),
+						static_cast<std::uint8_t>(blue),
+						static_cast<std::uint8_t>(alpha)
+					};
+				} catch (...) {
+					return std::nullopt;
+				}
+			} else {
+				try {
+					auto red = std::min(255, std::max(0, to_num<int>(components[0])));
+					auto green = std::min(255, std::max(0, to_num<int>(components[1])));
+					auto blue = std::min(255, std::max(0, to_num<int>(components[2])));
+					auto alpha = (components.size() == 4) ? std::min(255, std::max(0, to_num<int>(components[3]))) : 255;
+
+					return RE::GColor{
+						static_cast<std::uint8_t>(red),
+						static_cast<std::uint8_t>(green),
+						static_cast<std::uint8_t>(blue),
+						static_cast<std::uint8_t>(alpha)
+					};
+				} catch (...) {
+					return std::nullopt;
+				}
+			}
+		}
+
+		inline RE::GColor to_color(const std::string& str, RE::GColor defaultColor)
+		{
+			if (auto color = to_color(str)) {
+				return *color;
+			}
+
+			return defaultColor;
+		}
 	}
 }
