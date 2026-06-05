@@ -38,8 +38,8 @@ namespace clib_util::editorID
 			return a_form->GetFormEditorID();
 		default:
 			{
-				static auto tweaks = GetModuleHandleA("po3_Tweaks.dll");
-				static auto func = reinterpret_cast<_GetFormEditorID>(GetProcAddress(tweaks, "GetFormEditorID"));
+				static auto tweaks = REX::W32::GetModuleHandleW(L"po3_Tweaks.dll");
+				static auto func = reinterpret_cast<_GetFormEditorID>(REX::W32::GetProcAddress(tweaks, "GetFormEditorID"));
 				if (func) {
 					return func(a_form->formID);
 				}
