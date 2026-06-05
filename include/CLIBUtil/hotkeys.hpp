@@ -218,7 +218,7 @@ namespace clib_util::hotkeys
 			this->pattern = string::join(rawKeys, " + ");
 		}
 
-		bool Process(RE::InputEvent* const* a_event)
+		bool Process(RE::InputEvent* const* a_event, const bool a_ignoreMoveKeysOnKeyboard = false)
 		{
 			if (!isValid) {
 				return false;
@@ -244,10 +244,19 @@ namespace clib_util::hotkeys
 					break;
 				}
 
+				if (a_ignoreMoveKeysOnKeyboard)
+				{
+					if (key == 17 || key == 30 || key == 31 || key == 32)
+					{
+						continue;
+					}
+				}
+
 				if (button->IsPressed()) {
 					pressed.insert(key);
 				}
 			}
+
 
 			if (pressed == keys) {
 				if (!alreadyTriggered) {
@@ -295,7 +304,7 @@ namespace clib_util::hotkeys
 			this->pattern = string::join(rawKeys, " + ");
 			// Only non-empty KeyCombinations should be considered valid.
 			// However, we want to allow setting empty patterns to unbind given KeyCombination easily.
-			isValid = !keys.empty(); 
+			isValid = !keys.empty();
 			return true;
 		}
 
