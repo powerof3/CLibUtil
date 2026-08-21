@@ -1,6 +1,6 @@
 {
   "name": "clib-util",
-  "version-string": "1.5.0",
+  "version-string": "1.5.1",
   "homepage": "https://github.com/powerof3/CLibUtil",
   "license": "MIT",
   "dependencies": []

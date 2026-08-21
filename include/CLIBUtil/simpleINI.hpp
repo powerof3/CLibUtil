@@ -5,6 +5,8 @@
 #include "string.hpp"
 #include "detail/SimpleIni.h"
 
+#undef ERROR
+
 namespace clib_util::ini
 {
 	template <class T>
