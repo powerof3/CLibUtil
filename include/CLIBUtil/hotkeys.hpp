@@ -181,6 +181,9 @@ namespace clib_util::hotkeys
 
 		inline std::string_view GetNameByKey(std::uint32_t key)
 		{
+			if (key > 211 && key < 256) {
+				return "Invalid Key";
+			}
 			return keyMap.key(key);
 		}
 	}
@@ -244,10 +247,8 @@ namespace clib_util::hotkeys
 					break;
 				}
 
-				if (a_ignoreMoveKeysOnKeyboard)
-				{
-					if (key == 17 || key == 30 || key == 31 || key == 32)
-					{
+				if (a_ignoreMoveKeysOnKeyboard) {
+					if (key == 17 || key == 30 || key == 31 || key == 32) {
 						continue;
 					}
 				}
@@ -256,7 +257,6 @@ namespace clib_util::hotkeys
 					pressed.insert(key);
 				}
 			}
-
 
 			if (pressed == keys) {
 				if (!alreadyTriggered) {
