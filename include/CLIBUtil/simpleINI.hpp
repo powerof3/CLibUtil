@@ -9,12 +9,28 @@
 
 namespace clib_util::ini
 {
+	enum class bool_format
+	{
+		kText,
+		kNumeric
+	};
+
+	inline bool& get_value(CSimpleIniA& a_ini, bool& a_value, const char* a_section, const char* a_key, const char* a_comment, bool_format a_format)
+	{
+		a_value = a_ini.GetBoolValue(a_section, a_key, a_value);
+		if (a_format == bool_format::kNumeric) {
+			a_ini.SetLongValue(a_section, a_key, a_value ? 1L : 0L, a_comment);
+		} else {
+			a_ini.SetBoolValue(a_section, a_key, a_value, a_comment);
+		}
+		return a_value;
+	}
+
 	template <class T>
 	T& get_value(CSimpleIniA& a_ini, T& a_value, const char* a_section, const char* a_key, const char* a_comment, const char* a_delimiter = R"(|)")
 	{
 		if constexpr (std::is_same_v<T, bool>) {
-			a_value = a_ini.GetBoolValue(a_section, a_key, a_value);
-			a_ini.SetBoolValue(a_section, a_key, a_value, a_comment);
+			get_value(a_ini, a_value, a_section, a_key, a_comment, bool_format::kText);
 		} else if constexpr (std::is_floating_point_v<T>) {
 			a_value = static_cast<float>(a_ini.GetDoubleValue(a_section, a_key, a_value));
 			a_ini.SetDoubleValue(a_section, a_key, a_value, a_comment);
